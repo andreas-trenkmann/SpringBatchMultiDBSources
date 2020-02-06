@@ -31,7 +31,6 @@ public class BatchApplicationTestIT {
   @Autowired private JobLauncherTestUtils jobLauncherTestUtils;
 
   /** Test for the entire Job with all steps a small subset of accountProtocol-Data */
-  // @Ignore("only for real integration tests shortly")
   @Test
   public void jobLaunchTest() throws Exception {
 
