@@ -41,7 +41,7 @@
       <artifactId>mysql-connector-java</artifactId>
       <groupId>mysql</groupId>
       <scope>runtime</scope>
-      <version>8.0.13</version>
+      <version>8.0.28</version>
     </dependency>
     <!-- Test Environment -->
     <dependency>
