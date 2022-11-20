@@ -3,19 +3,28 @@ package net.trenkmann.dev.config;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+import lombok.extern.slf4j.Slf4j;
+
+@SpringBatchTest
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(
     classes = {
       BatchConfiguration.class,
@@ -24,11 +33,35 @@ import org.springframework.test.context.junit4.SpringRunner;
       Target1DataConfiguration.class,
       Target2DataConfiguration.class
     })
-@TestPropertySource(locations = "classpath:environment.properties")
+//@TestPropertySource(locations = "classpath:environment.properties")
 @Slf4j
 public class BatchApplicationTestIT {
 
-  @Autowired private JobLauncherTestUtils jobLauncherTestUtils;
+  @Autowired
+  private JobLauncherTestUtils jobLauncherTestUtils;
+
+  @BeforeEach
+  public void clearJobExecutions() {
+
+  }
+
+//  @BeforeAll
+//  void setup() {
+//    jobLauncherTestUtils = new JobLauncherTestUtils();
+//  }
+
+  @Test
+  public void testMyJob() throws Exception {
+    // given
+    JobParameters jobParameters = this.jobLauncherTestUtils.getUniqueJobParameters();
+
+    // when
+    JobExecution jobExecution = this.jobLauncherTestUtils.launchJob(jobParameters);
+
+    // then
+    Assert.assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
+  }
+
 
   /** Test for the entire Job with all steps a small subset of accountProtocol-Data */
   @Test
@@ -50,6 +83,6 @@ public class BatchApplicationTestIT {
                 - jobExecutionOverAll.getStartTime().getTime())
             / (1000 * 60));
 
-    assertEquals("COMPLETED", jobExecutionOverAll.getExitStatus().getExitCode());
+    Assertions.assertEquals("COMPLETED", jobExecutionOverAll.getExitStatus().getExitCode());
   }
 }

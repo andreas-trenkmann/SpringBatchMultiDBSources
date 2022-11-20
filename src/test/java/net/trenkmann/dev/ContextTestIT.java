@@ -4,13 +4,13 @@ package net.trenkmann.dev;
 import net.trenkmann.dev.config.SourceDataConfiguration;
 import net.trenkmann.dev.config.Target1DataConfiguration;
 import net.trenkmann.dev.config.Target2DataConfiguration;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes= {Target1DataConfiguration.class, SourceDataConfiguration.class, Target2DataConfiguration.class})
 @TestPropertySource(locations="classpath:environment.properties")
 public class ContextTestIT {

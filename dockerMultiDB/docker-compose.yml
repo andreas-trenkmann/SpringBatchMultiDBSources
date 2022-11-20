@@ -1,0 +1,28 @@
+# Use root/example as user/password credentials
+version: '3.1'
+volumes:
+  db-mysql:
+    driver: local
+
+services:
+
+  db-mysql:
+    image: mysql:5.7
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    # command: --default-authentication-plugin=mysql_native_password
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: export
+    ports:
+      - 32782:3306
+      - 32783:33060
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
